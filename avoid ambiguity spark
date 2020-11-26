@@ -1,0 +1,19 @@
+There are several ways to solve this ambiguity:
+
+*1. use the DataFrames to get the attribute so its already "resolved" and not just a string we need to map to a DataFrame.*
+
+> df.join(df2, df("_1") === df2("_1"))
+
+*2. Use aliases*
+
+> df.as('a).join(df2.as('b), $"a._1" === $"b._1")
+
+*3. rename the columns as you suggested.*
+
+> df.join(df2.withColumnRenamed("_1", "right_key"), $"_1" === $"right_key").printSchema
+
+*4. (Spark 1.4 only) use def join(right: DataFrame, usingColumn: String):DataFrame*
+
+> df.join(df1, "_1")
+
+This has the added benefit of only outputting a single _1 column.
