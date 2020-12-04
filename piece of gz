@@ -1,0 +1,1 @@
+zcat x.gz | head -n1000 > x.txt
